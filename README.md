@@ -1,4 +1,9 @@
 # VIGENERE-CIPHER
+
+## NAME-SRILAKSHMI.B.H
+
+## REG-212224100057
+
 ## EX. NO: 4
  
 
@@ -31,6 +36,81 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 
 ## PROGRAM
 
+```
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void encrypt(char text[], char key[], char result[])
+{
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    int i, j = 0;
+
+    for (i = 0; i < textLen; i++)
+    {
+        if (isalpha(text[i]))
+        {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            result[i] = ( (text[i] - base) + (toupper(key[j % keyLen]) - 'A') ) % 26 + base;
+            j++;
+        }
+        else
+        {
+            result[i] = text[i];
+        }
+    }
+    result[i] = '\0';
+}
+
+void decrypt(char text[], char key[], char result[])
+{
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    int i, j = 0;
+
+    for (i = 0; i < textLen; i++)
+    {
+        if (isalpha(text[i]))
+        {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            result[i] = ( ( (text[i] - base) - (toupper(key[j % keyLen]) - 'A') + 26 ) % 26 ) + base;
+            j++;
+        }
+       else
+       {
+            result[i] = text[i];
+       }
+    }
+    result[i] = '\0';
+}
+
+int main()
+{
+    char text[1000], key[100], enc[1000], dec[1000];
+
+    printf("Simulation of Vigenere Cipher\n");
+    printf("Enter the message: ");
+    scanf("%[^\n]", text);
+    getchar();
+    printf("Enter the key: ");
+    scanf("%s", key);
+
+    for (int i = 0; i < strlen(key); i++) key[i] = toupper(key[i]);
+
+    encrypt(text, key, enc);
+    printf("Encrypted text : %s\n", enc);
+
+    decrypt(enc, key, dec);
+    printf("Decrypted text : %s\n", dec);
+
+    return 0;
+}
+```
 ## OUTPUT
 
+<img width="556" height="200" alt="Screenshot 2025-09-03 at 2 17 54 PM" src="https://github.com/user-attachments/assets/5e94cfd2-b233-40e3-b584-558f7d12700b" />
+
+
 ## RESULT
+Thus, the program is executed successfully.
