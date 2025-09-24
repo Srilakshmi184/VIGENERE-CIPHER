@@ -36,80 +36,84 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 
 ## PROGRAM
 
-```
-#include <stdio.h>
-#include <string.h>
+```#include <stdio.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
-void encrypt(char text[], char key[], char result[])
-{
-    int textLen = strlen(text);
-    int keyLen = strlen(key);
-    int i, j = 0;
+void encipher();
+void decipher();
 
-    for (i = 0; i < textLen; i++)
-    {
-        if (isalpha(text[i]))
-        {
-            char base = isupper(text[i]) ? 'A' : 'a';
-            result[i] = ( (text[i] - base) + (toupper(key[j % keyLen]) - 'A') ) % 26 + base;
-            j++;
-        }
+int main() {
+    int choice;
+    while (1) {
+        printf("\n1. Encrypt Text");
+        printf("\t2. Decrypt Text");
+        printf("\t3. Exit");
+        printf("\n\nEnter Your Choice: ");
+        scanf("%d", &choice);
+        getchar(); // Consume newline character after scanf
+        
+        if (choice == 3)
+            return 0; // Proper exit from main()
+        else if (choice == 1)
+            encipher();
+        else if (choice == 2)
+            decipher();
         else
-        {
-            result[i] = text[i];
-        }
+            printf("Please Enter a Valid Option.\n");
     }
-    result[i] = '\0';
 }
 
-void decrypt(char text[], char key[], char result[])
-{
-    int textLen = strlen(text);
-    int keyLen = strlen(key);
-    int i, j = 0;
+void encipher() {
+    unsigned int i, j;
+    char input[50], key[10];
 
-    for (i = 0; i < textLen; i++)
-    {
-        if (isalpha(text[i]))
-        {
-            char base = isupper(text[i]) ? 'A' : 'a';
-            result[i] = ( ( (text[i] - base) - (toupper(key[j % keyLen]) - 'A') + 26 ) % 26 ) + base;
-            j++;
+    printf("\n\nEnter Plain Text: ");
+    scanf("%49s", input); // Prevent buffer overflow
+
+    printf("\nEnter Key Value: ");
+    scanf("%9s", key); // Prevent buffer overflow
+
+    printf("\nResultant Cipher Text: ");
+    for (i = 0, j = 0; i < strlen(input); i++, j++) {
+        if (j >= strlen(key)) {
+            j = 0; // Reset key index if it exceeds the key length
         }
-       else
-       {
-            result[i] = text[i];
-       }
+        printf("%c", 65 + (((toupper(input[i]) - 65) + (toupper(key[j]) - 65)) % 26)); // Encryption formula
     }
-    result[i] = '\0';
+    printf("\n"); // New line after output
 }
 
-int main()
-{
-    char text[1000], key[100], enc[1000], dec[1000];
+void decipher() {
+    unsigned int i, j;
+    char input[50], key[10];
+    int value;
 
-    printf("Simulation of Vigenere Cipher\n");
-    printf("Enter the message: ");
-    scanf("%[^\n]", text);
-    getchar();
-    printf("Enter the key: ");
-    scanf("%s", key);
+    printf("\n\nEnter Cipher Text: ");
+    scanf("%49s", input); // Prevent buffer overflow
 
-    for (int i = 0; i < strlen(key); i++) key[i] = toupper(key[i]);
+    printf("\nEnter the Key Value: ");
+    scanf("%9s", key); // Prevent buffer overflow
 
-    encrypt(text, key, enc);
-    printf("Encrypted text : %s\n", enc);
-
-    decrypt(enc, key, dec);
-    printf("Decrypted text : %s\n", dec);
-
-    return 0;
+    printf("\nDecrypted Plain Text: ");
+    for (i = 0, j = 0; i < strlen(input); i++, j++) {
+        if (j >= strlen(key)) {
+            j = 0; // Reset key index if it exceeds the key length
+        }
+        // Decryption formula
+        value = (toupper(input[i]) - 65) - (toupper(key[j]) - 65);
+        if (value < 0) {
+            value += 26; // Correct the negative wrap-around in the alphabet
+        }
+        printf("%c", 65 + (value % 26));
+    }
+    printf("\n"); // New line after output
 }
 ```
 ## OUTPUT
 
-<img width="556" height="200" alt="Screenshot 2025-09-03 at 2 17 54 PM" src="https://github.com/user-attachments/assets/5e94cfd2-b233-40e3-b584-558f7d12700b" />
+<img width="740" height="592" alt="Screenshot 2025-09-24 at 10 03 01 AM" src="https://github.com/user-attachments/assets/615562f1-37bd-48a1-ab12-2068509e8a69" />
 
 
 ## RESULT
